@@ -1,6 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import * as Yup from "yup";
 
+// Define validation schema using Yup
 const validationSchema = Yup.object({
   username: Yup.string().required("Username is required"),
   email: Yup.string().email("Invalid email").required("Email is required"),
@@ -8,53 +9,33 @@ const validationSchema = Yup.object({
 });
 
 const FormikForm = () => {
-  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
-    try {
-      const response = await fetch("https://jsonplaceholder.typicode.com/users", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(values),
-      });
-
-      if (!response.ok) {
-        throw new Error("Something went wrong!");
-      }
-
-      const data = await response.json();
-      console.log("User registered:", data);
-
-      resetForm();
-    } catch (error) {
-      console.error("Registration failed:", error);
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   return (
     <Formik
       initialValues={{ username: "", email: "", password: "" }}
       validationSchema={validationSchema}
-      onSubmit={handleSubmit}
+      onSubmit={(values, { resetForm }) => {
+        console.log("Form Submitted:", values);
+        resetForm(); // Reset form fields after submission
+      }}
     >
       {({ isSubmitting }) => (
         <Form>
           <div>
             <label>Username:</label>
             <Field type="text" name="username" />
-            <ErrorMessage name="username" component="p" />
+            <ErrorMessage name="username" component="p" style={{ color: "red" }} />
           </div>
 
           <div>
             <label>Email:</label>
             <Field type="email" name="email" />
-            <ErrorMessage name="email" component="p" />
+            <ErrorMessage name="email" component="p" style={{ color: "red" }} />
           </div>
 
           <div>
             <label>Password:</label>
             <Field type="password" name="password" />
-            <ErrorMessage name="password" component="p" />
+            <ErrorMessage name="password" component="p" style={{ color: "red" }} />
           </div>
 
           <button type="submit" disabled={isSubmitting}>
