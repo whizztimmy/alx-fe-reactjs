@@ -9,8 +9,12 @@ const UserCard = ({ users, isLoading, error }) => {
         <div key={user.id} className="bg-gray-700 text-white p-4 rounded-md shadow-md">
           <img src={user.avatar_url} alt="Avatar" className="w-20 h-20 rounded-full mx-auto" />
           <p className="text-center mt-2 text-lg font-bold">{user.login}</p>
-          <p className="text-center">{user.location || "Location: N/A"}</p>
-          <a href={user.html_url} target="_blank" rel="noopener noreferrer" className="block text-center mt-2 text-blue-400">
+          <a 
+            href={user.html_url} 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="block text-center mt-2 text-blue-400 hover:underline"
+          >
             View Profile
           </a>
         </div>
