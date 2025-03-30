@@ -4,18 +4,18 @@ import Search from "./components/Search";
 import UserCard from "./components/UserCard";
 
 function App() {
-  const [userData, setUserData] = useState(null);
+  const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const handleSearch = async (username) => {
+  const handleSearch = async (searchParams) => {
     setIsLoading(true);
     setError(null);
-    setUserData(null);
+    setUsers([]);
 
     try {
-      const data = await fetchUserData(username);
-      setUserData(data);
+      const data = await fetchUserData(searchParams);
+      setUsers(data);
     } catch {
       setError(true);
     } finally {
@@ -24,10 +24,10 @@ function App() {
   };
 
   return (
-    <div className="app">
-      <h1>GitHub User Search</h1>
+    <div className="bg-gray-900 min-h-screen text-white p-6">
+      <h1 className="text-center text-3xl font-bold mb-6">GitHub User Search</h1>
       <Search onSearch={handleSearch} />
-      <UserCard userData={userData} isLoading={isLoading} error={error} />
+      <UserCard users={users} isLoading={isLoading} error={error} />
     </div>
   );
 }

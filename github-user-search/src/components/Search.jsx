@@ -2,23 +2,52 @@ import { useState } from "react";
 
 const Search = ({ onSearch }) => {
   const [username, setUsername] = useState("");
+  const [location, setLocation] = useState("");
+  const [repos, setRepos] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (username.trim()) {
-      onSearch(username);
-    }
+    onSearch({ username, location, repos });
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        type="text"
-        placeholder="Enter GitHub username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-      />
-      <button type="submit">Search</button>
+    <form onSubmit={handleSubmit} className="p-4 bg-gray-800 text-white rounded-md shadow-md max-w-md mx-auto">
+      <div className="mb-4">
+        <label className="block mb-1">Username:</label>
+        <input
+          type="text"
+          className="w-full p-2 text-black rounded"
+          placeholder="Enter GitHub username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block mb-1">Location:</label>
+        <input
+          type="text"
+          className="w-full p-2 text-black rounded"
+          placeholder="Enter location"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+        />
+      </div>
+
+      <div className="mb-4">
+        <label className="block mb-1">Min Repositories:</label>
+        <input
+          type="number"
+          className="w-full p-2 text-black rounded"
+          placeholder="Minimum number of repositories"
+          value={repos}
+          onChange={(e) => setRepos(e.target.value)}
+        />
+      </div>
+
+      <button type="submit" className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded">
+        Search
+      </button>
     </form>
   );
 };
