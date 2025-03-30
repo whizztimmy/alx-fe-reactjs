@@ -1,7 +1,7 @@
 const UserCard = ({ userData, isLoading, error }) => {
   if (isLoading) return <p>Loading...</p>;
   if (error) return <p>Looks like we can't find the user</p>;
-  if (!userData) return null;
+  if (!userData) return null; // Don't render anything if no user data
 
   return (
     <div>
