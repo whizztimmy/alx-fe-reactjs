@@ -4,8 +4,21 @@ const Search = ({ onSearch }) => {
   const [username, setUsername] = useState("");
   const [location, setLocation] = useState("");
   const [repos, setRepos] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
 
-  const handleSubmit = (e) => {
+  // Function to fetch user suggestions
+  const fetchSuggestions = async (query) => {
+    if (!query) return setSuggestions([]);
+    try {
+      const response = await fetch(`https://api.github.com/search/users?q=${query}`);
+      const data = await response.json();
+      setSuggestions(data.items || []);
+    } catch (error) {
+      console.error("Error fetching suggestions:", error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     onSearch({ username, location, repos });
   };
@@ -19,8 +32,21 @@ const Search = ({ onSearch }) => {
           className="w-full p-2 text-black rounded"
           placeholder="Enter GitHub username"
           value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          onChange={(e) => {
+            setUsername(e.target.value);
+            fetchSuggestions(e.target.value);
+          }}
         />
+        {/* Show suggestions */}
+        {suggestions.length > 0 && (
+          <ul className="bg-white text-black rounded shadow-md mt-1">
+            {suggestions.slice(0, 5).map((user) => (
+              <li key={user.id} className="p-2 cursor-pointer hover:bg-gray-300" onClick={() => setUsername(user.login)}>
+                {user.login}
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <div className="mb-4">
