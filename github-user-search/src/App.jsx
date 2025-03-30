@@ -1,20 +1,25 @@
 import { useState } from "react";
-import { fetchGitHubUser } from "./services/githubService";
+import { fetchUserData } from "./services/githubService";
 import SearchBar from "./components/SearchBar";
 import UserCard from "./components/UserCard";
 
 function App() {
   const [userData, setUserData] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   const handleSearch = async (username) => {
+    setIsLoading(true);
+    setError(null);
+    setUserData(null);
+
     try {
-      setError(null);
-      const data = await fetchGitHubUser(username);
+      const data = await fetchUserData(username);
       setUserData(data);
     } catch {
-      setUserData(null);
-      setError("User not found");
+      setError(true);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -22,8 +27,7 @@ function App() {
     <div className="app">
       <h1>GitHub User Search</h1>
       <SearchBar onSearch={handleSearch} />
-      {error && <p>{error}</p>}
-      <UserCard userData={userData} />
+      <UserCard userData={userData} isLoading={isLoading} error={error} />
     </div>
   );
 }
